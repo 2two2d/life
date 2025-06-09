@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
 
+import { numberValidator } from "@utils";
+
 import { DEFAULT_PLAYGROUND_SIZE } from "./const";
 
-import { generateInitialMap } from "./helpers";
+import { countSurroundingLivingCells, generateInitialMap } from "./helpers";
 
 import type { IMap, IUseLifePlaygroundPresenter } from "./interface";
 
@@ -29,8 +31,25 @@ const useLifePlaygroundPresenter = ({
   const handleStartGame = useCallback(() => {
     setIsInProcess(true);
 
-    return null;
-  }, []);
+    setInterval(() => {
+      setMap((prevMap) => {
+        return prevMap.map((row, x) =>
+          row.map((cell, y) => {
+            const surroundingLivingCells = countSurroundingLivingCells(
+              [x, y],
+              prevMap,
+            );
+
+            const shouldLive = cell.isAlive
+              ? numberValidator(surroundingLivingCells, [{ min: 2, max: 3 }])
+              : numberValidator(surroundingLivingCells, [{ exact: 3 }]);
+
+            return { isAlive: shouldLive };
+          }),
+        );
+      });
+    }, 100);
+  }, [map]);
 
   return { map, handleClick, handleStartGame };
 };

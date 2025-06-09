@@ -1,4 +1,4 @@
-import type { ICellEntity } from "@/domain";
+import type { ICellEntity } from "src/domain";
 
 interface IUseLifePlaygroundPresenter {
   playgroundSize?: number;
