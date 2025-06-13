@@ -6,6 +6,7 @@ interface IDrawPlaygroundProps<
   onClick: (index: [number, number]) => void;
   cellIsPaintedKey?: K;
   cellSize?: number;
+  className?: string;
 }
 
 interface IMargins {

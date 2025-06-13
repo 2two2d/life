@@ -1,3 +1,5 @@
+import { MILLISECONDS_IN_SECOND, TWO } from "@common/const";
+
 const DEFAULT_PLAYGROUND_SIZE = 40;
 
 const GAME_RULES = {
@@ -5,4 +7,6 @@ const GAME_RULES = {
   cellToDieCondition: { min: 2, max: 3 },
 };
 
-export { DEFAULT_PLAYGROUND_SIZE, GAME_RULES };
+const DEFAULT_GAME_INTERVAL_DELAY = MILLISECONDS_IN_SECOND / TWO;
+
+export { DEFAULT_PLAYGROUND_SIZE, GAME_RULES, DEFAULT_GAME_INTERVAL_DELAY };

@@ -1,6 +1,11 @@
 const ZERO = 0,
   ONE = 1,
+  TWO = 2,
+  THREE = 3,
+  FOUR = 4,
   FIRST = 0,
   TEN = 10;
 
-export { TEN, ZERO, FIRST, ONE };
+const MILLISECONDS_IN_SECOND = 1000;
+
+export { TEN, ZERO, FIRST, ONE, TWO, THREE, FOUR, MILLISECONDS_IN_SECOND };

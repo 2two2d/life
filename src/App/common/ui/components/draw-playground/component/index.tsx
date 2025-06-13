@@ -12,6 +12,8 @@ import {
 
 import { TEN, FIRST, ZERO } from "@common/const";
 
+import { clsx } from "clsx";
+
 import { eventHasOffsetProperties } from "../helpers";
 
 import { BASE_PLAYGROUND_CANVAS_CELL_SIZE } from "../const";
@@ -27,6 +29,7 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
     onClick,
     cellIsPaintedKey = "isFilled",
     cellSize = BASE_PLAYGROUND_CANVAS_CELL_SIZE,
+    className,
   },
   forwardRef: ForwardedRef<HTMLCanvasElement> = null,
 ) => {
@@ -66,10 +69,10 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
   useEffect(() => {
     if (!ctx2d) return;
 
-    ctx2d.fillStyle = "white";
+    ctx2d.fillStyle = "black";
     ctx2d.fillRect(ZERO, ZERO, width * cellSize, height * cellSize);
 
-    ctx2d.fillStyle = "black";
+    ctx2d.fillStyle = "white";
 
     map.forEach((row, rowIndex) => {
       row.forEach((item, itemIndex) => {
@@ -91,7 +94,7 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
 
   return (
     <canvas
-      className="border-2 border-b-blue-500"
+      className={clsx("!block !w-auto !h-auto !self-center", className)}
       ref={localRef}
       onClick={handleClick}
       width={width * cellSize}
