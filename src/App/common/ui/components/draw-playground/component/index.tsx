@@ -1,42 +1,28 @@
 import {
-  type ForwardedRef,
-  forwardRef,
-  type ForwardRefRenderFunction,
-  type MouseEventHandler,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
   useRef,
   useState,
+  useEffect,
+  useMemo,
+  type MouseEventHandler,
 } from "react";
 
+import { clsx } from "clsx";
 import { TEN, FIRST, ZERO } from "@common/const";
 
-import { clsx } from "clsx";
-
 import { eventHasOffsetProperties } from "../helpers";
-
 import { BASE_PLAYGROUND_CANVAS_CELL_SIZE } from "../const";
 
 import type { IDrawPlaygroundProps, IMargins } from "../interface";
 
-const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
-  HTMLCanvasElement,
-  IDrawPlaygroundProps
-> = (
-  {
-    map,
-    onClick,
-    cellIsPaintedKey = "isFilled",
-    cellSize = BASE_PLAYGROUND_CANVAS_CELL_SIZE,
-    className,
-  },
-  forwardRef: ForwardedRef<HTMLCanvasElement> = null,
-) => {
-  const localRef = useRef<HTMLCanvasElement>(null);
+export function PlaygroundCanvas<T>({
+  map,
+  onClick,
+  isPainted,
+  cellSize = BASE_PLAYGROUND_CANVAS_CELL_SIZE,
+  className,
+}: IDrawPlaygroundProps<T>) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ctx2d, setCtx2d] = useState<CanvasRenderingContext2D | null>(null);
-
-  useImperativeHandle(forwardRef, () => localRef.current!, [localRef]);
 
   const { width, height } = useMemo(
     () => ({ width: map.length, height: map[FIRST]?.length ?? ZERO }),
@@ -67,6 +53,12 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
   };
 
   useEffect(() => {
+    if (!ctx2d && canvasRef.current) {
+      setCtx2d(canvasRef.current.getContext("2d"));
+    }
+  }, [ctx2d]);
+
+  useEffect(() => {
     if (!ctx2d) return;
 
     ctx2d.fillStyle = "black";
@@ -76,7 +68,7 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
 
     map.forEach((row, rowIndex) => {
       row.forEach((item, itemIndex) => {
-        if (item[cellIsPaintedKey]) {
+        if (isPainted(item)) {
           ctx2d.fillRect(
             rowIndex * cellSize,
             itemIndex * cellSize,
@@ -86,21 +78,15 @@ const PlaygroundCanvasRenderFunction: ForwardRefRenderFunction<
         }
       });
     });
-  }, [map, cellSize, ctx2d]);
-
-  useEffect(() => {
-    if (localRef.current && !ctx2d) setCtx2d(localRef.current.getContext("2d"));
-  }, [localRef]);
+  }, [map, cellSize, ctx2d, isPainted, width, height]);
 
   return (
     <canvas
       className={clsx("!block !w-auto !h-auto !self-center", className)}
-      ref={localRef}
+      ref={canvasRef}
       onClick={handleClick}
       width={width * cellSize}
       height={height * cellSize}
     />
   );
-};
-
-export const PlaygroundCanvas = forwardRef(PlaygroundCanvasRenderFunction);
+}

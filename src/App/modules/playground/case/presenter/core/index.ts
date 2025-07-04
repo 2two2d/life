@@ -62,7 +62,7 @@ const useLifePlaygroundPresenter = (size?: number) => {
         );
       });
     }, DEFAULT_GAME_INTERVAL_DELAY * speedCoefficient);
-  }, []);
+  }, [speedCoefficient]);
 
   const handleStopGame = useCallback(() => {
     if (intervalRef.current !== null) clearInterval(intervalRef.current);

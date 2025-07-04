@@ -1,10 +1,7 @@
-interface IDrawPlaygroundProps<
-  T extends { [key: string]: boolean } = { isFilled: boolean },
-  K extends keyof T = "isFilled",
-> {
+interface IDrawPlaygroundProps<T> {
   map: T[][];
   onClick: (index: [number, number]) => void;
-  cellIsPaintedKey?: K;
+  isPainted: (cell: T) => boolean;
   cellSize?: number;
   className?: string;
 }

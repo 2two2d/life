@@ -50,7 +50,7 @@ const LifePlayground = (): ReactNode => {
         <PlaygroundCanvas
           map={map}
           onClick={handleClick}
-          cellIsPaintedKey="isAlive"
+          isPainted={(cell) => cell.isAlive}
         />
 
         <Flex gap="5" width="400px">
